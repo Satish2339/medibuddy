@@ -543,6 +543,7 @@ async function initAuthPage() {
   const loginForm = document.getElementById("loginForm");
   const forgotPasswordForm = document.getElementById("forgotPasswordForm");
   const resetPasswordForm = document.getElementById("resetPasswordForm");
+  const loginOtpForm = document.getElementById("loginOtpForm");
   const forgotPasswordLink = document.getElementById("forgotPasswordLink");
   const message = document.getElementById("authMessage");
   const setMessage = (text, kind = "error") => {
@@ -553,6 +554,7 @@ async function initAuthPage() {
     loginForm.hidden = false;
     forgotPasswordForm.hidden = true;
     resetPasswordForm.hidden = true;
+    loginOtpForm.hidden = true;
     forgotPasswordLink.hidden = false;
     setMessage("");
   };
@@ -563,7 +565,7 @@ async function initAuthPage() {
     forgotPasswordForm.elements.email.value = loginForm.elements.email.value;
     forgotPasswordForm.elements.email.focus();
   });
-  loginForm.addEventListener("submit", (event) => { event.preventDefault(); completeAuthentication(loginForm, "/auth/login", setMessage); });
+  loginForm.addEventListener("submit", (event) => { event.preventDefault(); requestAuthOtp(loginForm, "/auth/login", loginOtpForm, setMessage); });
   forgotPasswordForm.addEventListener("submit", (event) => { event.preventDefault(); requestAuthOtp(forgotPasswordForm, "/auth/forgot-password", resetPasswordForm, setMessage); });
   resetPasswordForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -593,6 +595,9 @@ async function initAuthPage() {
     }
   });
   document.getElementById("backToLoginFromForgot").addEventListener("click", showLogin);
+  loginOtpForm.addEventListener("submit", (event) => { event.preventDefault(); completeAuthentication(loginOtpForm, "/auth/login/verify-otp", setMessage); });
+  document.getElementById("resendLoginOtp").addEventListener("click", () => requestAuthOtp(loginForm, "/auth/login", loginOtpForm, setMessage));
+  document.getElementById("backToLogin").addEventListener("click", showLogin);
   document.getElementById("backToForgotPassword").addEventListener("click", () => {
     resetPasswordForm.hidden = true;
     forgotPasswordForm.hidden = false;
