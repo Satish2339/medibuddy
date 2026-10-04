@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f2f6f5" />
+    <title>Medibuddy | Patient sign in</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body class="auth-page" data-page="auth">
+    <div class="auth-page-shell">
+      <header class="auth-topbar">
+        <a class="auth-brand" href="./index.html" aria-label="Medibuddy home">
+          <span class="auth-brand-mark" aria-hidden="true">+</span>
+          <span><strong>Medibuddy</strong><small>Patient care portal</small></span>
+        </a>
+        <a class="auth-home-link" href="./index.html"><span aria-hidden="true">←</span> Back to home</a>
+      </header>
+      <main class="auth-main">
+        <section class="auth-story" aria-labelledby="authStoryTitle">
+          <div class="auth-story-copy">
+            <p class="auth-kicker"><span></span> YOUR CARE, IN ONE PLACE</p>
+            <h1 id="authStoryTitle">A better way to stay connected to your care.</h1>
+            <p class="auth-story-text">Sign in to manage appointments, keep track of updates, and make your next step in care simpler.</p>
+            <div class="auth-benefits">
+              <div><span class="auth-check" aria-hidden="true">✓</span><span><strong>Appointments at a glance</strong><small>View upcoming visits and their status.</small></span></div>
+              <div><span class="auth-check" aria-hidden="true">✓</span><span><strong>Updates that stay personal</strong><small>See messages connected to your account.</small></span></div>
+            </div>
+          </div>
+          <div class="auth-visual" aria-hidden="true">
+            <div class="auth-visual-glow"></div>
+            <div class="auth-visual-cross">+</div>
+            <div class="auth-appointment-card">
+              <div class="auth-appointment-top"><span class="auth-calendar-icon">▦</span><span class="auth-appointment-status">PATIENT PORTAL</span></div>
+              <p class="auth-appointment-label">Your care journey</p>
+              <strong>One secure place</strong>
+              <div class="auth-appointment-rule"><span></span></div>
+              <div class="auth-appointment-foot"><span>Appointments</span><span>Care updates</span></div>
+            </div>
+            <div class="auth-orbit auth-orbit-one"></div><div class="auth-orbit auth-orbit-two"></div>
+          </div>
+          <div class="auth-story-foot"><span class="auth-live-dot"></span> Private patient access</div>
+        </section>
+        <section class="auth-panel" aria-labelledby="authPanelTitle">
+          <div class="auth-panel-heading">
+            <p class="auth-step-label">PATIENT ACCOUNT <span>•</span> SIGN IN</p>
+            <h2 id="authPanelTitle">Welcome back</h2>
+            <p>Enter your account details to continue.</p>
+          </div>
+          <div class="auth-forms">
+            <form id="loginForm" class="auth-form">
+              <label><span>Email address</span><input type="email" name="email" autocomplete="email" placeholder="you@example.com" required /></label>
+              <label><span>Password</span><input type="password" name="password" autocomplete="current-password" minlength="8" placeholder="Enter your password" required /></label>
+              <div class="auth-inline-row"><span class="auth-secure-hint"><span aria-hidden="true">▣</span> Secure patient sign-in</span><button id="forgotPasswordLink" class="auth-text-button" type="button">Forgot password?</button></div>
+              <button class="auth-submit" type="submit">Sign in <span aria-hidden="true">→</span></button>
+            </form>
+            <form id="forgotPasswordForm" class="auth-form" hidden>
+              <p class="auth-form-intro">Enter your account email. If it is registered, we will send a password reset code.</p>
+              <label><span>Email address</span><input type="email" name="email" autocomplete="email" placeholder="you@example.com" required /></label>
+              <button class="auth-submit" type="submit">Send reset code <span aria-hidden="true">→</span></button>
+              <button id="backToLoginFromForgot" class="auth-text-button auth-centered-link" type="button">Back to sign in</button>
+            </form>
+            <form id="resetPasswordForm" class="auth-form" hidden>
+              <input type="hidden" name="email" />
+              <p class="auth-form-intro">Enter the six-digit code sent to <strong data-otp-email></strong> and choose a new password.</p>
+              <label><span>Reset code</span><input class="auth-otp-input" type="text" name="otp" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required /></label>
+              <label><span>New password</span><input type="password" name="password" autocomplete="new-password" minlength="8" maxlength="128" placeholder="At least 8 characters" required /></label>
+              <label><span>Confirm new password</span><input type="password" name="confirmPassword" autocomplete="new-password" minlength="8" maxlength="128" placeholder="Re-enter new password" required /></label>
+              <button class="auth-submit" type="submit">Reset password <span aria-hidden="true">→</span></button>
+              <button id="backToForgotPassword" class="auth-text-button auth-centered-link" type="button">Request another code</button>
+            </form>
+            <form id="loginOtpForm" class="auth-form" hidden>
+              <input type="hidden" name="email" />
+              <p class="auth-form-intro">A sign-in code was sent to <strong data-otp-email></strong>. Enter it to securely continue.</p>
+              <label><span>Six-digit email code</span><input class="auth-otp-input" type="text" name="otp" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required /></label>
+              <button class="auth-submit" type="submit">Verify and sign in <span aria-hidden="true">→</span></button>
+              <div class="auth-action-row"><button id="resendLoginOtp" class="auth-text-button" type="button">Resend code</button><button id="backToLogin" class="auth-text-button" type="button">Use another email</button></div>
+            </form>
+          </div>
+          <p id="authMessage" class="inline-message auth-message" role="status" aria-live="polite"></p>
+          <div class="auth-separator"><span>NEW TO MEDIBUDDY?</span></div>
+          <a class="auth-secondary-action" href="./register.html">Create a patient account <span aria-hidden="true">→</span></a>
+          <p class="auth-privacy-note"><span aria-hidden="true">▣</span> Email verification helps protect access to your account.</p>
+        </section>
+      </main>
+      <footer class="auth-footer"><span>© Medibuddy</span><span>Care, connected.</span></footer>
+    </div>
+    <script src="./assets/js/config.js"></script>
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f3f7f8" />
+    <title>Medibuddy | Create patient account</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body class="auth-page" data-page="register">
+    <div class="auth-page-shell">
+      <header class="auth-topbar">
+        <a class="auth-brand" href="./index.html" aria-label="Medibuddy home">
+          <span class="auth-brand-mark" aria-hidden="true">+</span>
+          <span><strong>Medibuddy</strong><small>Patient care portal</small></span>
+        </a>
+        <a class="auth-home-link" href="./index.html"><span aria-hidden="true">←</span> Back to home</a>
+      </header>
+      <main class="auth-main auth-register-main">
+        <section class="auth-story" aria-labelledby="authStoryTitle">
+          <div class="auth-story-copy">
+            <p class="auth-kicker"><span></span> YOUR CARE, IN ONE PLACE</p>
+            <h1 id="authStoryTitle">Make room for simpler care.</h1>
+            <p class="auth-story-text">Create your patient account to manage appointments and receive updates in one convenient place.</p>
+            <div class="auth-benefits">
+              <div><span class="auth-check" aria-hidden="true">✓</span><span><strong>Stay on top of visits</strong><small>Keep your appointment details together.</small></span></div>
+              <div><span class="auth-check" aria-hidden="true">✓</span><span><strong>Protected account access</strong><small>Verify your email to finish registration.</small></span></div>
+            </div>
+          </div>
+          <div class="auth-visual" aria-hidden="true">
+            <div class="auth-visual-glow"></div>
+            <div class="auth-visual-cross">+</div>
+            <div class="auth-appointment-card">
+              <div class="auth-appointment-top"><span class="auth-calendar-icon">▦</span><span class="auth-appointment-status">PATIENT PORTAL</span></div>
+              <p class="auth-appointment-label">A more connected experience</p>
+              <strong>Your health, your account</strong>
+              <div class="auth-appointment-rule"><span></span></div>
+              <div class="auth-appointment-foot"><span>Appointments</span><span>Care updates</span></div>
+            </div>
+            <div class="auth-orbit auth-orbit-one"></div><div class="auth-orbit auth-orbit-two"></div>
+          </div>
+          <div class="auth-story-foot"><span class="auth-live-dot"></span> Private patient access</div>
+        </section>
+        <section class="auth-panel auth-register-panel" aria-labelledby="authPanelTitle">
+          <div class="auth-panel-heading">
+            <p class="auth-step-label">PATIENT ACCOUNT <span>•</span> REGISTRATION</p>
+            <h2 id="authPanelTitle">Create your account</h2>
+            <p>Enter your details to get started.</p>
+          </div>
+          <div class="auth-forms">
+            <form id="registerForm" class="auth-form auth-form-grid">
+              <label class="field-full"><span>Full name</span><input type="text" name="fullName" autocomplete="name" maxlength="120" placeholder="Your full name" required /></label>
+              <label class="field-full"><span>Email address</span><input type="email" name="email" autocomplete="email" placeholder="you@example.com" required /></label>
+              <label><span>Phone</span><input type="tel" name="phone" autocomplete="tel" maxlength="30" placeholder="Phone number" required /></label>
+              <label><span>Age</span><input type="number" name="age" min="1" max="120" placeholder="Age" required /></label>
+              <label class="field-full"><span>Gender</span><select name="gender" required><option value="">Choose an option</option><option>Female</option><option>Male</option><option>Other</option></select></label>
+              <label class="field-full"><span>Password <small>(at least 8 characters)</small></span><input type="password" name="password" autocomplete="new-password" minlength="8" maxlength="128" placeholder="Create a password" required /></label>
+              <button class="auth-submit field-full" type="submit">Create patient account <span aria-hidden="true">→</span></button>
+            </form>
+            <form id="registerOtpForm" class="auth-form" hidden>
+              <input type="hidden" name="email" />
+              <p class="auth-form-intro">Enter the six-digit verification code sent to <strong data-otp-email></strong> to complete registration.</p>
+              <label><span>Six-digit email code</span><input class="auth-otp-input" type="text" name="otp" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required /></label>
+              <button class="auth-submit" type="submit">Verify email and create account <span aria-hidden="true">→</span></button>
+              <div class="auth-action-row"><button id="resendRegisterOtp" class="auth-text-button" type="button">Resend code</button><button id="backToRegister" class="auth-text-button" type="button">Edit details</button></div>
+            </form>
+          </div>
+          <p id="registerMessage" class="inline-message auth-message" role="status" aria-live="polite"></p>
+          <div class="auth-separator"><span>ALREADY HAVE AN ACCOUNT?</span></div>
+          <a class="auth-secondary-action" href="./auth.html">Return to sign in <span aria-hidden="true">→</span></a>
+          <p class="auth-privacy-note"><span aria-hidden="true">▣</span> Email verification helps protect access to your account.</p>
+        </section>
+      </main>
+      <footer class="auth-footer"><span>© Medibuddy</span><span>Care, connected.</span></footer>
+    </div>
+    <script src="./assets/js/config.js"></script>
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>

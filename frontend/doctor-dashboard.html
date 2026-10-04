@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medibuddy | Doctor Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body data-page="doctor-dashboard">
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="./index.html"><span class="brand-mark">MB</span><div><strong>Medibuddy</strong><span>Hospital Appointment Hub</span></div></a>
+        <nav class="nav-links">
+          <a href="./index.html">Home</a>
+          <a href="./doctors.html">Doctors</a>
+          <a href="./book.html">Book</a>
+          <a href="./doctor-dashboard.html" class="active">Doctor Desk</a>
+          <a href="./admin.html">Admin</a>
+          <a href="./contact.html">Contact</a>
+        </nav>
+        <button class="mobile-nav-toggle" id="mobileNavToggle" type="button">Menu</button>
+      </header>
+      <main>
+        <section class="page-banner glass-card">
+          <div><p class="eyebrow">Doctor Workspace</p><h1>Manage appointments, patient queues, and consultation progress.</h1></div>
+          <div class="filter-row"><label><span>Select Doctor</span><select id="doctorDashboardSelect"></select></label></div>
+        </section>
+        <section class="dashboard-metrics" id="doctorMetrics"></section>
+        <section class="glass-card">
+          <div class="section-heading"><div><p class="eyebrow">Appointment Queue</p><h2>Review assigned appointments</h2><p class="muted">Download visit summaries. Booking status changes are restricted to the administrator workspace.</p></div></div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Patient</th><th>Date</th><th>Time</th><th>Reason</th><th>Mode</th><th>Status</th><th>Summary</th></tr></thead>
+              <tbody id="doctorAppointmentsTable"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="./assets/js/config.js"></script>
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>

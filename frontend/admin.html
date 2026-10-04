@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medibuddy | Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body data-page="admin">
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="./index.html"><span class="brand-mark">MB</span><div><strong>Medibuddy</strong><span>Hospital Appointment Hub</span></div></a>
+        <nav class="nav-links">
+          <a href="./index.html">Home</a>
+          <a href="./doctors.html">Doctors</a>
+          <a href="./book.html">Book</a>
+          <a href="./doctor-dashboard.html">Doctor Desk</a>
+          <a href="./admin.html" class="active">Admin</a>
+          <a href="./contact.html">Contact</a>
+        </nav>
+        <button class="mobile-nav-toggle" id="mobileNavToggle" type="button">Menu</button>
+      </header>
+      <main>
+        <section id="adminLoginGate" class="admin-login-gate">
+          <article class="glass-card admin-login-card">
+            <div class="admin-login-icon" aria-hidden="true">⌑</div>
+            <p class="eyebrow">Restricted workspace</p>
+            <h1>Administrator sign in</h1>
+            <p class="muted">Enter your administrator credentials to access patient bookings and operations.</p>
+            <form id="adminLoginForm" class="admin-login-form">
+              <label><span>Username</span><input id="adminUsername" name="username" type="text" autocomplete="username" value="admin" required /></label>
+              <label><span>Password</span><input id="adminPassword" name="password" type="password" autocomplete="current-password" required /></label>
+              <button id="adminLoginButton" class="btn btn-primary" type="submit">Sign in securely</button>
+            </form>
+            <p id="adminLoginMessage" class="inline-message" role="status" aria-live="polite"></p>
+            <p class="admin-login-help">For local setup, configure <strong>ADMIN_PASSWORD</strong> in <strong>backend/.env</strong> and restart the Flask API if sign-in is unavailable.</p>
+          </article>
+        </section>
+        <div id="adminDashboard" hidden>
+        <section class="page-banner glass-card admin-hero"><div><p class="eyebrow">Operations center</p><h1>Hospital administration</h1><p class="hero-text">A clear, up-to-date view of appointments, clinical teams, and patient activity.</p></div><div class="admin-hero-actions"><span id="adminLastUpdated" class="admin-updated-label">Loading dashboard…</span><button id="adminRefresh" class="btn btn-secondary" type="button">↻ Refresh</button><button id="adminExport" class="btn btn-primary" type="button">↓ Export CSV</button><button id="adminLogout" class="btn btn-secondary" type="button">Sign out</button></div></section>
+        <aside class="admin-security-note" role="note"><strong>Clinical data notice</strong><span>Admin APIs now require administrator sign-in. The separate clinician workspace still needs its own role-based login; use local/sample data only and do not expose it publicly.</span></aside>
+        <p id="adminMessage" class="inline-message admin-message" role="status" aria-live="polite"></p>
+        <section class="dashboard-metrics" id="adminMetrics"></section>
+        <section class="admin-grid">
+          <article class="glass-card">
+            <div class="section-heading"><div><p class="eyebrow">Capacity overview</p><h2>Appointments by department</h2><p class="muted">Distribution across all recorded bookings.</p></div><span id="adminActiveCount" class="status-pill">0 active</span></div>
+            <div id="departmentLoad" class="stack-list"></div>
+          </article>
+          <article class="glass-card">
+            <div class="section-heading"><div><p class="eyebrow">Activity feed</p><h2>Latest operations updates</h2></div></div>
+            <div id="adminNotifications" class="stack-list"></div>
+          </article>
+        </section>
+        <section class="glass-card admin-appointments-panel">
+          <div class="section-heading appointment-section-heading"><div><p class="eyebrow">Booking workflow</p><h2>Appointment register</h2><p class="muted">Search, review, update booking status, and export the filtered register.</p><p id="adminAppointmentCount" class="admin-result-count" aria-live="polite"></p></div><div class="appointment-filters admin-filters"><label><span>Search records</span><input id="adminAppointmentSearch" type="search" placeholder="Patient, doctor, email, reason…" /></label><label><span>Appointment status</span><select id="adminAppointmentStatus"><option value="all">All statuses</option><option>Scheduled</option><option>Confirmed</option><option>Completed</option><option>Cancelled</option></select></label><label><span>From date</span><input id="adminAppointmentFrom" type="date" /></label><label><span>To date</span><input id="adminAppointmentTo" type="date" /></label><button id="adminClearFilters" class="btn btn-secondary admin-clear-filters" type="button">Clear filters</button></div></div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Patient</th><th>Assigned clinician</th><th>Visit</th><th>Reason for visit</th><th>Current status</th><th>Update status</th><th>Summary</th></tr></thead>
+              <tbody id="adminAppointmentsTable"></tbody>
+            </table>
+          </div>
+        </section>
+        </div>
+      </main>
+    </div>
+    <script src="./assets/js/config.js"></script>
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>

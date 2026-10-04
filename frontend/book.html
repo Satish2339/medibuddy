@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medibuddy | Book Appointment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body data-page="book">
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="./index.html"><span class="brand-mark">MB</span><div><strong>Medibuddy</strong><span>Hospital Appointment Hub</span></div></a>
+        <nav class="nav-links">
+          <a href="./index.html">Home</a>
+          <a href="./doctors.html">Doctors</a>
+          <a href="./book.html" class="active">Book</a>
+          <a href="./doctor-dashboard.html">Doctor Desk</a>
+          <a href="./admin.html">Admin</a>
+          <a href="./contact.html">Contact</a>
+        </nav>
+        <button class="mobile-nav-toggle" id="mobileNavToggle" type="button">Menu</button>
+      </header>
+      <main class="booking-layout">
+        <section class="glass-card">
+          <div class="section-heading"><div><p class="eyebrow">Appointment Booking</p><h1>Schedule a consultation in a few steps</h1></div></div>
+          <p id="bookingAuthNotice" class="inline-message"></p>
+          <form id="appointmentForm" class="booking-form">
+            <label><span>Patient Name</span><input type="text" name="fullName" placeholder="Enter full name" required /></label>
+            <label><span>Email</span><input type="email" name="email" placeholder="patient@email.com" required /></label>
+            <label><span>Phone</span><input type="tel" name="phone" placeholder="9876543210" required /></label>
+            <label><span>Age</span><input type="number" name="age" min="1" max="120" placeholder="29" required /></label>
+            <label><span>Gender</span><select name="gender" required><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></label>
+            <label><span>Doctor</span><select name="doctorId" id="doctorSelect" required></select></label>
+            <label><span>Date</span><input type="date" name="appointmentDate" required /></label>
+            <label><span>Time</span><input type="time" name="appointmentTime" required /></label>
+            <label><span>Mode</span><select name="mode" required><option>In-person</option><option>Video</option><option>Phone</option></select></label>
+            <label class="full-width"><span>Reason for Visit</span><textarea name="reason" rows="4" placeholder="Symptoms, check-up reason, or follow-up details" required></textarea></label>
+            <div class="full-width form-actions"><button class="btn btn-primary" type="submit">Confirm Booking</button><div id="bookingMessage" class="inline-message"></div></div>
+          </form>
+        </section>
+
+        <aside class="calendar-stack">
+          <section class="glass-card">
+            <div class="panel-head"><div><p class="eyebrow">Calendar View</p><h3>Hospital booking load</h3></div><input type="month" id="calendarMonth" /></div>
+            <div id="calendarGrid" class="calendar-grid"></div>
+          </section>
+          <section class="glass-card"><p class="eyebrow">Recent Appointments</p><div id="recentAppointments" class="stack-list"></div></section>
+        </aside>
+      </main>
+    </div>
+    <script src="./assets/js/config.js"></script>
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>

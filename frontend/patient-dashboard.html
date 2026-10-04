@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medibuddy | My care</title>
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body data-page="patient-dashboard">
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="./index.html"><span class="brand-mark">MB</span><div><strong>Medibuddy</strong><span>Hospital Appointment Hub</span></div></a>
+        <nav class="nav-links"><a href="./index.html">Home</a><a href="./doctors.html">Doctors</a><a href="./book.html">Book</a></nav>
+        <button class="mobile-nav-toggle" id="mobileNavToggle" type="button">Menu</button>
+      </header>
+      <main>
+        <section class="page-banner glass-card patient-banner">
+          <div><p class="eyebrow">Your Patient Portal</p><h1 id="patientWelcome">My care</h1><p id="patientDetails" class="hero-text"></p></div>
+          <div><a class="btn btn-primary" href="./book.html">Book appointment</a><button class="btn btn-secondary" id="patientBrowserAlerts" type="button">Enable browser alerts</button></div>
+          <p id="patientDashboardMessage" class="inline-message full-width" role="status"></p>
+        </section>
+        <section class="patient-summary-strip" id="patientAppointmentSummary" aria-label="Appointment summary"></section>
+        <section class="patient-dashboard-grid">
+          <div class="glass-card patient-history-card"><div class="section-heading"><div><p class="eyebrow">Your care timeline</p><h2>Appointment history</h2><p class="muted">Upcoming and past visits, all in one place.</p></div><label class="history-filter"><span>Show</span><select id="patientAppointmentFilter"><option value="all">All visits</option><option value="upcoming">Upcoming</option><option value="past">Past visits</option></select></label></div><div id="patientAppointments" class="stack-list"></div></div>
+          <div class="glass-card"><div class="section-heading"><div><p class="eyebrow">Secure updates</p><h2>Notifications</h2></div></div><div id="patientNotifications" class="stack-list"></div><p class="muted">Updates refresh automatically while this page is open.</p></div>
+        </section>
+      </main>
+    </div>
+    <script src="./assets/js/config.js"></script>
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "Medibuddy Hospital Booking",
+  "short_name": "Medibuddy",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7fbff",
+  "theme_color": "#2556f6",
+  "description": "Responsive hospital appointment booking mini project.",
+  "icons": []
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medibuddy | Specialists</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body data-page="doctors">
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="./index.html"><span class="brand-mark">MB</span><div><strong>Medibuddy</strong><span>Hospital Appointment Hub</span></div></a>
+        <nav class="nav-links">
+          <a href="./index.html">Home</a>
+          <a href="./doctors.html" class="active">Doctors</a>
+          <a href="./book.html">Book</a>
+          <a href="./doctor-dashboard.html">Doctor Desk</a>
+          <a href="./admin.html">Admin</a>
+          <a href="./contact.html">Contact</a>
+        </nav>
+        <button class="mobile-nav-toggle" id="mobileNavToggle" type="button">Menu</button>
+      </header>
+      <main>
+        <section class="page-banner glass-card">
+          <div><p class="eyebrow">Doctor Directory</p><h1>Browse specialists by expertise, availability, and consultation fee.</h1></div>
+          <div class="filter-row">
+            <label><span>Specialty</span><select id="specialtyFilter"></select></label>
+            <a class="btn btn-primary" href="./book.html">Go To Booking</a>
+          </div>
+        </section>
+        <section class="section-block"><div class="doctor-grid" id="doctorDirectory"></div></section>
+      </main>
+    </div>
+    <script src="./assets/js/config.js"></script>
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>
