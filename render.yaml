@@ -5,7 +5,7 @@ services:
     plan: free
     rootDir: backend
     buildCommand: pip install -r requirements.txt
-    startCommand: waitress-serve --listen=0.0.0.0:$PORT app:app
+    startCommand: waitress-serve --listen=0.0.0.0:$PORT wsgi:app
     envVars:
       - key: DATABASE_URL
         fromDatabase:
