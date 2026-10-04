@@ -210,7 +210,12 @@ function demoApi(path, options = {}) {
 
 async function apiFetch(path, options = {}) {
   const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
-  const token = getAdminToken() || getAuthToken();
+  const method = (options.method || "GET").toUpperCase();
+  const adminRequest = path.startsWith("/admin/")
+    || path.startsWith("/notifications")
+    || path.startsWith("/appointments/")
+    || (path === "/appointments" && method !== "POST");
+  const token = adminRequest ? getAdminToken() || getAuthToken() : getAuthToken();
   if (token) headers.Authorization = `Bearer ${token}`;
   let response;
   try {
