@@ -90,3 +90,5 @@ This setup is for a demo with test data only. The doctor dashboard API does not 
 ## Security and Clinical-Use Notice
 
 The admin dashboard APIs require the configured administrator credentials. The separate doctor dashboard APIs still need clinician authentication and authorization, and this project does not yet provide a full audit trail or deployment hardening. Do not expose it to the public internet or use it for real patient data until every clinical API is access-controlled and applicable privacy/regulatory reviews are completed. A password-protected admin page does not by itself establish NMC or other regulatory compliance.
+
+Hospital Appointment Booking Application with Beautiful UI
