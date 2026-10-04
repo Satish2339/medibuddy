@@ -72,18 +72,11 @@
               <button class="auth-submit" type="submit">Reset password <span aria-hidden="true">→</span></button>
               <button id="backToForgotPassword" class="auth-text-button auth-centered-link" type="button">Request another code</button>
             </form>
-            <form id="loginOtpForm" class="auth-form" hidden>
-              <input type="hidden" name="email" />
-              <p class="auth-form-intro">A sign-in code was sent to <strong data-otp-email></strong>. Enter it to securely continue.</p>
-              <label><span>Six-digit email code</span><input class="auth-otp-input" type="text" name="otp" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required /></label>
-              <button class="auth-submit" type="submit">Verify and sign in <span aria-hidden="true">→</span></button>
-              <div class="auth-action-row"><button id="resendLoginOtp" class="auth-text-button" type="button">Resend code</button><button id="backToLogin" class="auth-text-button" type="button">Use another email</button></div>
-            </form>
           </div>
           <p id="authMessage" class="inline-message auth-message" role="status" aria-live="polite"></p>
           <div class="auth-separator"><span>NEW TO MEDIBUDDY?</span></div>
           <a class="auth-secondary-action" href="./register.html">Create a patient account <span aria-hidden="true">→</span></a>
-          <p class="auth-privacy-note"><span aria-hidden="true">▣</span> Email verification helps protect access to your account.</p>
+          <p class="auth-privacy-note"><span aria-hidden="true">▣</span> Your patient account information is private.</p>
         </section>
       </main>
       <footer class="auth-footer"><span>© Medibuddy</span><span>Care, connected.</span></footer>

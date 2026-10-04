@@ -510,72 +510,8 @@ def login_patient():
     )
     if not patient or not patient["password_hash"] or not isinstance(password, str) or not check_password_hash(patient["password_hash"], password):
         return json_response({"error": "Email or password is incorrect"}, 401)
-    if not email_otp_configured():
-        return json_response({"error": "Email verification is not configured. Add real SMTP details to backend/.env and replace SMTP_PASSWORD=REPLACE_WITH_NEW_GOOGLE_APP_PASSWORD with your newly generated Google App Password. Restart the API afterward."}, 503)
-
-    email = patient["email"]
-    otp, otp_digest = generate_email_otp(email, "login")
-    with get_connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute("SELECT sent_at FROM auth_otp_challenges WHERE email = %s AND purpose = 'login' FOR UPDATE", (email,))
-            previous = cur.fetchone()
-            if previous and previous["sent_at"] > datetime.now(timezone.utc) - timedelta(seconds=60):
-                return json_response({"error": "Please wait 60 seconds before requesting another code"}, 429)
-            cur.execute(
-                """
-                INSERT INTO auth_otp_challenges (email, purpose, otp_hash, expires_at, attempts, sent_at)
-                VALUES (%s, 'login', %s, %s, 0, CURRENT_TIMESTAMP)
-                ON CONFLICT (email, purpose) DO UPDATE SET
-                    otp_hash = EXCLUDED.otp_hash,
-                    expires_at = EXCLUDED.expires_at,
-                    attempts = 0,
-                    sent_at = CURRENT_TIMESTAMP
-                """,
-                (email, otp_digest, datetime.now(timezone.utc) + timedelta(minutes=10)),
-            )
-        conn.commit()
-    try:
-        send_email_otp(email, "login", otp)
-    except (OSError, smtplib.SMTPException, RuntimeError, ValueError):
-        return json_response({"error": "Could not send the verification email. Check the SMTP settings and try again."}, 503)
-    return json_response({"message": "Sign-in code sent to your email", "email": email, "expiresInSeconds": 600}, 202)
-
-
-@app.route("/api/auth/login/verify-otp", methods=["POST"])
-def verify_login_otp():
-    payload = request.get_json(silent=True) or {}
-    if not isinstance(payload, dict):
-        return json_response({"error": "Request body must be a JSON object"}, 400)
-    if any(not isinstance(payload.get(key, ""), str) for key in ("email", "otp")):
-        return json_response({"error": "Email and verification code must be text"}, 400)
-    email = str(payload.get("email", "")).strip().lower()
-    otp = str(payload.get("otp", "")).strip()
-    if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", email) or not re.fullmatch(r"\d{6}", otp):
-        return json_response({"error": "Enter your email and six-digit code"}, 400)
-
-    with get_connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute("SELECT * FROM auth_otp_challenges WHERE email = %s AND purpose = 'login' FOR UPDATE", (email,))
-            challenge = cur.fetchone()
-            if not challenge:
-                return json_response({"error": "Code expired or sign-in was not found. Sign in again."}, 400)
-            if challenge["expires_at"] <= datetime.now(timezone.utc):
-                cur.execute("DELETE FROM auth_otp_challenges WHERE email = %s AND purpose = 'login'", (email,))
-                conn.commit()
-                return json_response({"error": "Code expired. Sign in again to request a new code."}, 400)
-            if challenge["attempts"] >= 5:
-                return json_response({"error": "Too many incorrect codes. Sign in again later."}, 429)
-            if not otp_matches(email, "login", otp, challenge["otp_hash"]):
-                cur.execute("UPDATE auth_otp_challenges SET attempts = attempts + 1 WHERE email = %s AND purpose = 'login'", (email,))
-                conn.commit()
-                return json_response({"error": "The verification code is incorrect"}, 400)
-            cur.execute("DELETE FROM auth_otp_challenges WHERE email = %s AND purpose = 'login'", (email,))
-            cur.execute("SELECT id, full_name, email, phone, age, gender FROM patients WHERE email = %s", (email,))
-            patient = cur.fetchone()
-        conn.commit()
-    if not patient:
-        return json_response({"error": "Patient account not found"}, 401)
-    return json_response({"message": "Signed in", "token": issue_patient_token(patient["id"]), "patient": patient})
+    patient_data = {key: patient[key] for key in ("id", "full_name", "email", "phone", "age", "gender")}
+    return json_response({"message": "Signed in", "token": issue_patient_token(patient["id"]), "patient": patient_data})
 
 
 @app.route("/api/auth/forgot-password", methods=["POST"])
