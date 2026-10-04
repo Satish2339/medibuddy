@@ -1,5 +1,6 @@
 import os
 import re
+import json
 import secrets
 import hashlib
 import hmac
@@ -9,8 +10,11 @@ import threading
 import time
 from datetime import date, datetime, time as time_type, timedelta, timezone
 from email.message import EmailMessage
+from email.utils import parseaddr
 from functools import wraps
 from pathlib import Path
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 
 import jwt
 from flask import Flask, g, jsonify, request
@@ -211,6 +215,48 @@ def send_email_otp(email, purpose, code):
     username = os.getenv("SMTP_USER")
     password = os.getenv("SMTP_PASSWORD")
     sender = os.getenv("SMTP_FROM")
+    brevo_api_key = os.getenv("BREVO_API_KEY", "").strip()
+    purpose_label = {
+        "register": "registration",
+        "login": "sign-in",
+        "reset": "password reset",
+    }.get(purpose, "verification")
+    email_text = (
+        f"Your Medibuddy {purpose_label} code is {code}. "
+        "It expires in 10 minutes. If you did not request this code, ignore this message."
+    )
+
+    sender_name, sender_email = parseaddr(sender or "")
+    placeholder_brevo_key = "your-brevo-api-key"
+    use_brevo = bool(
+        brevo_api_key
+        and brevo_api_key.lower() != placeholder_brevo_key
+        and sender_email
+        and sender_email.lower() != "no-reply@example.com"
+    )
+    if use_brevo:
+        payload = {
+            "sender": {"name": sender_name or "Medibuddy", "email": sender_email},
+            "to": [{"email": email}],
+            "subject": "Medibuddy email verification code",
+            "textContent": email_text,
+            "htmlContent": f"<p>{email_text}</p>",
+        }
+        api_request = Request(
+            "https://api.brevo.com/v3/smtp/email",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"api-key": brevo_api_key, "Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urlopen(api_request, timeout=15) as response:
+                if response.status not in {200, 201, 202}:
+                    raise RuntimeError(f"Brevo API returned HTTP {response.status}")
+        except HTTPError as error:
+            detail = error.read(1024).decode("utf-8", errors="replace")
+            raise RuntimeError(f"Brevo API returned HTTP {error.code}: {detail}") from error
+        return
+
     if not all((host, username, password, sender)):
         raise RuntimeError("SMTP email settings are incomplete")
 
@@ -218,16 +264,7 @@ def send_email_otp(email, purpose, code):
     message["Subject"] = "Medibuddy email verification code"
     message["From"] = sender
     message["To"] = email
-    purpose_label = {
-        "register": "registration",
-        "login": "sign-in",
-        "reset": "password reset",
-    }.get(purpose, "verification")
-    message.set_content(
-        f"Your Medibuddy {purpose_label} code is {code}. "
-        "It expires in 10 minutes. If you did not request this code, ignore this message."
-    )
-
+    message.set_content(email_text)
     port = int(os.getenv("SMTP_PORT", "587"))
     use_ssl = os.getenv("SMTP_USE_SSL", "false").lower() == "true"
     if use_ssl:
@@ -242,15 +279,27 @@ def send_email_otp(email, purpose, code):
 
 
 def email_otp_configured():
-    required = {key: os.getenv(key, "").strip() for key in ("SMTP_HOST", "SMTP_USER", "SMTP_PASSWORD", "SMTP_FROM")}
+    sender = os.getenv("SMTP_FROM", "").strip()
+    brevo_api_key = os.getenv("BREVO_API_KEY", "").strip()
     placeholder_values = {
         "smtp.example.com",
         "your-smtp-user",
         "your-smtp-app-password",
+        "your-brevo-api-key",
         "no-reply@example.com",
         "replace_with_new_google_app_password",
     }
-    return all(value and value.lower() not in placeholder_values for value in required.values())
+    sender_email = parseaddr(sender)[1]
+    if (
+        brevo_api_key
+        and brevo_api_key.lower() not in placeholder_values
+        and sender_email
+        and sender_email.lower() not in placeholder_values
+    ):
+        return True
+
+    required = {key: os.getenv(key, "").strip() for key in ("SMTP_HOST", "SMTP_USER", "SMTP_PASSWORD")}
+    return bool(sender and all(value and value.lower() not in placeholder_values for value in required.values()))
 
 
 def initialize_database():
@@ -407,7 +456,7 @@ def register_patient():
         return json_response({"error": "Password must be between 8 and 128 characters"}, 400)
 
     if not email_otp_configured():
-        return json_response({"error": "Email verification is not configured. Add real SMTP details to backend/.env and replace SMTP_PASSWORD=REPLACE_WITH_NEW_GOOGLE_APP_PASSWORD with your newly generated Google App Password. Restart the API afterward."}, 503)
+        return json_response({"error": "Email delivery is not configured. Set BREVO_API_KEY and a verified SMTP_FROM sender, or configure SMTP settings."}, 503)
 
     otp, otp_digest = generate_email_otp(email, "register")
     password_hash = generate_password_hash(password)
@@ -512,7 +561,7 @@ def login_patient():
     if not patient or not patient["password_hash"] or not isinstance(password, str) or not check_password_hash(patient["password_hash"], password):
         return json_response({"error": "Email or password is incorrect"}, 401)
     if not email_otp_configured():
-        return json_response({"error": "Email verification is not configured. Add real SMTP details to backend/.env and replace SMTP_PASSWORD=REPLACE_WITH_NEW_GOOGLE_APP_PASSWORD with your newly generated Google App Password. Restart the API afterward."}, 503)
+        return json_response({"error": "Email delivery is not configured. Set BREVO_API_KEY and a verified SMTP_FROM sender, or configure SMTP settings."}, 503)
 
     email = patient["email"]
     otp, otp_digest = generate_email_otp(email, "login")
@@ -589,7 +638,7 @@ def request_password_reset():
     if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", email) or len(email) > 160:
         return json_response({"error": "Enter a valid email address"}, 400)
     if not email_otp_configured():
-        return json_response({"error": "Email verification is not configured. Add real SMTP details to backend/.env and restart the API."}, 503)
+        return json_response({"error": "Email delivery is not configured. Set BREVO_API_KEY and a verified SMTP_FROM sender, or configure SMTP settings."}, 503)
 
     patient = fetch_one("SELECT id FROM patients WHERE email = %s AND password_hash IS NOT NULL", (email,))
     generic_response = {

@@ -50,7 +50,7 @@ Set a long, random `JWT_SECRET` in `backend/.env` before deployment. If omitted,
 
 Set `ADMIN_USERNAME` and a unique, strong `ADMIN_PASSWORD` in `backend/.env` before opening `frontend/admin.html`; the example file contains placeholders only. Admin sessions expire after eight hours, are stored in the current browser tab, and admin booking/summary/notification/status APIs require the signed administrator token. Failed sign-ins are rate-limited per server process. Restart Flask after changing credentials.
 
-Configure real `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_FROM` values in `backend/.env` to deliver email OTPs; the sample values in `.env.example` are not usable. Use an SMTP app password where your provider supports it; never put mail credentials in frontend files. Set `SMTP_USE_SSL=true` only for an implicit-SSL SMTP endpoint (commonly port 465); otherwise STARTTLS is used. Restart the API after changing `.env`.
+Configure a verified sender in `SMTP_FROM` and a `BREVO_API_KEY` to deliver email OTPs over HTTPS; keep the API key in environment settings, never in frontend files or source control. SMTP remains available by setting `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, and `SMTP_PASSWORD`; use an app password where supported. Render Free blocks SMTP ports 25, 465, and 587, so use the Brevo API there. Set `SMTP_USE_SSL=true` only for implicit-SSL SMTP (commonly port 465); otherwise STARTTLS is used.
 
 ## Patient Accounts and Notifications
 
@@ -77,7 +77,7 @@ If backend URL changes, edit `frontend/assets/js/config.js`.
 
 ## Deploy a Demo on Render
 
-This repository includes a Render Blueprint in `render.yaml`. Push the project to GitHub, create a new Blueprint in Render from that repository, and enter a strong, unique admin password plus SMTP credentials when prompted. Render creates the web service and PostgreSQL database; the Flask service serves both the frontend and `/api` from one URL. Use the generated `onrender.com` URL to open the site.
+This repository includes a Render Blueprint in `render.yaml`. Push the project to GitHub, create a new Blueprint in Render from that repository, and enter a strong, unique admin password plus `BREVO_API_KEY` when prompted. Verify your sender email in Brevo and set it in `SMTP_FROM`. Render creates the web service and PostgreSQL database; the Flask service serves both the frontend and `/api` from one URL. Use the generated `onrender.com` URL to open the site.
 
 This setup is for a demo with test data only. The doctor dashboard API does not yet require clinician authentication, and the project is not hardened for real patient information. Do not enter real patient data or use this deployment for clinical operations. Review the selected Render plans and database retention before deploying.
 
