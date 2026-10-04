@@ -443,7 +443,8 @@ def register_patient():
 
     try:
         send_email_otp(email, "register", otp)
-    except (OSError, smtplib.SMTPException, RuntimeError, ValueError):
+    except (OSError, smtplib.SMTPException, RuntimeError, ValueError) as error:
+        app.logger.warning("Registration verification email failed (%s): %s", type(error).__name__, error)
         return json_response({"error": "Could not send the verification email. Check the SMTP settings and try again."}, 503)
     return json_response({"message": "Verification code sent to your email", "email": email, "expiresInSeconds": 600}, 202)
 
